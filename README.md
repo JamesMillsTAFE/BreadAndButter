@@ -23,4 +23,3 @@ Contains:
 - [ ] \(Optional) Dialogue System
   - [ ] \(Optional) Dialogue Tree
   - [ ] \(Optional) Dialogue Editor
-- Testing
