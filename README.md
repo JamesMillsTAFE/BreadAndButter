@@ -8,9 +8,9 @@ Contains:
 - [X] Mobile
   - [X] Joystick Input
   - [X] Swipe Input
-- [ ] Loot System
-  - [ ] Loot Object
-  - [ ] Loot Generator
+- [X] Loot System
+  - [X] Loot Object
+  - [X] Loot Generator
 - [ ] Trigger System
 - [ ] VR
   - [ ] Interactions
