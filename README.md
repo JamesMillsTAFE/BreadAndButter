@@ -5,13 +5,13 @@ Contains:
 - [X] Core
   - [X] MonoSingleton
   - [X] Runnables
+  - [X] Trigger System
 - [X] Mobile
   - [X] Joystick Input
   - [X] Swipe Input
 - [X] Loot System
   - [X] Loot Object
   - [X] Loot Generator
-- [ ] Trigger System
 - [ ] VR
   - [ ] Interactions
   - [ ] Movement
