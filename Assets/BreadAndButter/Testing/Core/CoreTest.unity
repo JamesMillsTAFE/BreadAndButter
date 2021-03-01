@@ -330,6 +330,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameplate: {fileID: 605165020}
+  groundTag: Untagged
+  otherLevel: Assets/BreadAndButter/Testing/Loot/LootTesting.unity
 --- !u!114 &663738939
 MonoBehaviour:
   m_ObjectHideFlags: 0

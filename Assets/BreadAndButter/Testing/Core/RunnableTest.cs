@@ -6,6 +6,10 @@ public class RunnableTest : RunnableBehaviour
 {
     [SerializeField]
     private TextMesh nameplate;
+    [SerializeField, Tag]
+    private string groundTag;
+    [SerializeField, SceneField]
+    private string otherLevel;
 
     protected override void OnRun(params object[] _params)
     {
