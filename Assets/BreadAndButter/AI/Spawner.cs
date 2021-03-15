@@ -10,7 +10,7 @@ namespace BreadAndButter.AI
         [SerializeField, Tooltip("Use the objects y position always when spawning an object.")]
         private bool floorYPosition = false;
         [SerializeField]
-        private Vector2 spawnRate = new Vector2(0, 1);
+        private Vector2 spawnRate = new Vector2(0, 1); 
 
         [SerializeField]
         private bool shouldSpawnBoss = false;
