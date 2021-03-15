@@ -14,7 +14,7 @@ public class StupidSorting : MonoBehaviour
     void Start()
     {
         GenerateObjects();
-
+         
         Debug.LogError(gameObjects
             .Where(x => x.tag == "Player")
             .Select(x => x.name)
