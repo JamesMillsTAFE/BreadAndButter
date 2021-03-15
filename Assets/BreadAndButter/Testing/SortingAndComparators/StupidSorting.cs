@@ -23,6 +23,20 @@ public class StupidSorting : MonoBehaviour
             .Where(x => int.Parse(x) > 0)
             .ToList()
             .Aggregate((current, next) => $"{current}, {next}"));
+
+        string test = "";
+        foreach (GameObject go in gameObjects)
+        {
+            test += $"{go.name},";
+        }
+        Debug.LogError(test);
+
+        test = "";
+        foreach (GameObject go in gameObjects.Randomise())
+        {
+            test += $"{go.name},";
+        }
+        Debug.LogError(test);
     }
 
     private void GenerateObjects()
