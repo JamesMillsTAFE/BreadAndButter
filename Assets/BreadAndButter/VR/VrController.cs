@@ -8,8 +8,10 @@ namespace BreadAndButter.VR
 {
     [RequireComponent(typeof(SteamVR_Behaviour_Pose))]
     [RequireComponent(typeof(VrControllerInput))]
+    [RequireComponent(typeof(Rigidbody))]
     public class VrController : MonoBehaviour
     {
+        public Rigidbody Rigidbody => rigidbody;
         public VrControllerInput Input => input;
         /// <summary>
         /// How fast the controller is moving in worldspace
@@ -24,11 +26,13 @@ namespace BreadAndButter.VR
 
         private SteamVR_Behaviour_Pose pose;
         private VrControllerInput input;
+        private new Rigidbody rigidbody;
 
         public void Initialise()
         {
             pose = gameObject.GetComponent<SteamVR_Behaviour_Pose>();
             input = gameObject.GetComponent<VrControllerInput>();
+            rigidbody = gameObject.GetComponent<Rigidbody>();
 
             input.Initialise(this);
         }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace BreadAndButter.VR.Interaction
@@ -14,6 +12,9 @@ namespace BreadAndButter.VR.Interaction
 
         private InteractableObject collidingObject;
         private InteractableObject heldObject;
+
+        // The held object's original parent before it got reparented to this controller
+        private Transform heldOriginalParent;
 
         // Start is called before the first frame update
         void Start()
@@ -40,56 +41,46 @@ namespace BreadAndButter.VR.Interaction
 
         private void GrabObject()
         {
-            // Safety measure to prevent connecting to something that don't exist yo.
-            if(collidingObject == null)
-                return;
-
             heldObject = collidingObject;
             collidingObject = null;
-            FixedJoint joint = AddJoint(heldObject.Rigidbody);
 
-            if(heldObject.AttachPoint != null)
-            {
-                heldObject.transform.position = 
-                    transform.position - (heldObject.AttachPoint.position - heldObject.transform.position);
-                heldObject.transform.rotation =
-                    transform.rotation * Quaternion.Euler(heldObject.AttachPoint.localEulerAngles);
-            }
-            else
-            {
-                heldObject.transform.position = transform.position;
-                heldObject.transform.rotation = transform.rotation;
-            }
+            heldOriginalParent = heldObject.transform.parent;
 
-            grabbed.Invoke(new InteractEventArgs(input.Controller, heldObject.Rigidbody, heldObject.Collider));
+            heldObject.Rigidbody.isKinematic = true;
+            SnapObject(heldObject.transform, heldObject.AttachPoint);
+        
             heldObject.OnObjectGrabbed(input.Controller);
+            grabbed.Invoke(new InteractEventArgs(input.Controller, heldObject.Rigidbody, heldObject.Collider));
         }
 
         private void ReleaseObject()
         {
-            RemoveJoint(gameObject.GetComponent<FixedJoint>());
-            released.Invoke(new InteractEventArgs(input.Controller, heldObject.Rigidbody, heldObject.Collider));
+            heldObject.Rigidbody.isKinematic = false;
+            heldObject.transform.SetParent(heldOriginalParent);
+
+            heldObject.Rigidbody.velocity = input.Controller.Velocity;
+            heldObject.Rigidbody.angularVelocity = input.Controller.AngularVelocity;
+
             heldObject.OnObjectReleased(input.Controller);
+            released.Invoke(new InteractEventArgs(input.Controller, heldObject.Rigidbody, heldObject.Collider));
             heldObject = null;
         }
 
-        private FixedJoint AddJoint(Rigidbody _rigidbody)
+        private void SnapObject(Transform _object, Transform _snapHandle)
         {
-            FixedJoint joint = gameObject.AddComponent<FixedJoint>();
-            joint.breakForce = 20000;
-            joint.breakTorque = 20000;
-            joint.connectedBody = _rigidbody;
-            return joint;
-        }
-
-        private void RemoveJoint(FixedJoint _joint)
-        {
-            if(_joint != null)
+            Rigidbody attachPoint = input.Controller.Rigidbody;
+            _object.transform.SetParent(transform);
+            if(_snapHandle == null)
             {
-                _joint.connectedBody = null;
-                Destroy(_joint);
-                heldObject.Rigidbody.velocity = input.Controller.Velocity;
-                heldObject.Rigidbody.angularVelocity = input.Controller.AngularVelocity;
+                // Reset it to the same as the controllers position + rotation
+                _object.localPosition = Vector3.zero;
+                _object.localRotation = Quaternion.identity;
+            }
+            else
+            {
+                // Calculate the correct position and rotation based on the snap handle
+                _object.rotation = attachPoint.transform.rotation * Quaternion.Euler(_snapHandle.localEulerAngles);
+                _object.position = attachPoint.transform.position - (_snapHandle.position - _object.position);
             }
         }
     }
